@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group">
                         <label for="title">Изменено</label>
-                        <input type="text" value="{{ $item->uptated_at }}" class="form-control" disabled>
+                        <input type="text" value="{{ $item->updated_at }}" class="form-control" disabled>
                     </div>
                     <div class="form-group">
                         <label for="title">Удалено</label>
