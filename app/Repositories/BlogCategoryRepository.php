@@ -30,7 +30,26 @@ class BlogCategoryRepository extends CoreRepository
      */
     public function getForComboBox()
     {
-        return $this->startConditions()->all();
+        $colomns = implode(', ', [
+            'id',
+            'CONCAT (id, ". ", title) AS id_title',
+        ]);
+
+       /* $result[] = $this->startConditions()->all();
+        $result[] = $this
+            ->startConditions()
+            ->select('blog_categories.*',
+            \DB::raw('CONCAT (id, ". ", title) AS id_title'))
+            ->toBase()
+            ->get();*/
+        $result = $this
+            ->startConditions()
+            ->selectRaw($colomns)
+            ->toBase()
+            ->get();
+//        dd($result->first());
+
+        return $result;
     }
 
     /**
@@ -39,5 +58,24 @@ class BlogCategoryRepository extends CoreRepository
     protected function getModelClass()
     {
         return Model::class;
+    }
+
+    /**
+     * Получить категорию для вывода пагинитором.
+     *
+     * @param int|null $perPage
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getAllWithPaginate($perPage = null)
+    {
+        $columns = ['id', 'title', 'parent_id'];
+
+        $result = $this
+            ->startConditions()
+            ->select($columns)
+            ->paginate($perPage);
+
+        return $result;
     }
 }
